@@ -1,47 +1,44 @@
 import Pessoa from './Pessoa.js';
 
 export class GerenciaPessoas {
-  //coloquei tudo publico para tentar ganhar tempo sem os get e set
 
-  pessoas = []
+  #pessoas = []
 
-    constructor(){
-        this.#configurar();
-    }
+  constructor(){
+      this.#configurar();
+  }
 
-    #configurar() {
-      let adicionarBtn = document.getElementById('adicionarBtn');
-      let removerBtn = document.getElementById('removerBtn');
+  #configurar() {
+    let adicionarBtn = document.getElementById('adicionarBtn');
+    let removerBtn = document.getElementById('removerBtn');
 
-      adicionarBtn.addEventListener('click', this.adicionar);
+    adicionarBtn.addEventListener('click', this.adicionar);
 
-      removerBtn.addEventListener('click', this.remover)
+    removerBtn.addEventListener('click', this.remover)
   }
 
   adicionar(){
-      let nome = document.getElementById('nome').value;
+        let nome = document.getElementById('nome').value;
         let idade = parseInt(document.getElementById('idade').value);
         let telefone = parseInt(document.getElementById('telefone').value);
         let email = document.getElementById('email').value;
         let existe = false;
 
-        if(this.pessoas !== undefined){
-          
+        if(this.#pessoas !== null){
+          this.#pessoas.forEach((pessoasExistente) => {
+            if(nome === pessoasExistente.nome || telefone === pessoasExistente.telefone || email === pessoasExistente.email){
+              alert("O filme já existe.")
+              existe = true;
+            }
+          })
         }
-    
-        this.pessoas.forEach((pessoasExistente) => {
-        if(nome === pessoasExistente.nome || telefone === pessoasExistente.telefone || email === pessoasExistente.email){
-          alert("O filme já existe.")
-          existe = true;
-        }
-      })
       
-
         if(!existe){
-          this.pessoas.push(new Pessoa(nome,idade,telefone,email));
+          this.#pessoas.push(new Pessoa(nome,idade,telefone,email));
           this.exibir();
         }
     }
+
 
   remover(){
     let nomeRemoverInput = document.getElementById('nomeRemover');
@@ -49,10 +46,10 @@ export class GerenciaPessoas {
     if(nomeRemoverInput instanceof HTMLInputElement){
         let nome = nomeRemoverInput.value;
 
-        let indice = this.pessoas.findIndex((pessoa) => pessoa.nome === nome);
+        let indice = this.#pessoas.findIndex((pessoa) => pessoa.nome === nome);
         //filter, find, etc.
         if (indice !== -1 && !isNaN(indice)) {
-            this.pessoas.splice(indice,1);
+            this.#pessoas.splice(indice,1);
             this.exibir();
         } else {
             alert("Pessoa não encontrada")
@@ -66,7 +63,7 @@ export class GerenciaPessoas {
   
     resultadoDiv.innerHTML = '';
   
-    this.pessoas.forEach(pessoa => {
+    this.#pessoas.forEach(pessoa => {
         const div = document.createElement('div');
         div.className = 'pessoa-item';
         div.textContent = `${pessoa.toString()}`;
